@@ -141,7 +141,7 @@ public class NextableClient {
         try {
             request(HttpMethod.DELETE, "reservations", queryParams);
         } catch (NextableException e) {
-            if(!(e.getStatusType().getStatusCode() == 40 && e.getResponse() != null && e.getResponse().getString("message", "").equals("Reservation already cancelled"))) {
+            if(!(e.getStatusType().getStatusCode() == 400 && e.getResponse() != null && e.getResponse().getString("message", "").equals("Reservation already cancelled"))) {
                 throw e;
             }
         }
