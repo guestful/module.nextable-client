@@ -138,7 +138,13 @@ public class NextableClient {
         MultivaluedMap<String, Object> queryParams = new MultivaluedHashMap<>();
         queryParams.putSingle("reservationId", reservationId);
         queryParams.putSingle("restaurantId", restaurantId);
-        request(HttpMethod.DELETE, "reservations", queryParams);
+        try {
+            request(HttpMethod.DELETE, "reservations", queryParams);
+        } catch (NextableException e) {
+            if(!(e.getStatusType().getStatusCode() == 40 && e.getResponse() != null && e.getResponse().getString("message", "").equals("Reservation already cancelled"))) {
+                throw e;
+            }
+        }
     }
 
     public NextableReservation editReservation(NextableReservation reservation) {
